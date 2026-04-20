@@ -18,6 +18,14 @@ pip install -r requirements.txt
 make serve
 ```
 
+## Docker (local)
+```shell
+docker stop freeunit-docs; docker rm freeunit-docs 2>/dev/null; docker build -f Dockerfile.local -t freeunit-docs-local . && docker run -d -p 8000:8000 --name freeunit-docs freeunit-docs-local
+http://localhost:8000/
+```
+
+
+
 The site is served locally at `http://localhost:8000`.
 
 Pull requests automatically deploy a preview site when opened by a maintainer.

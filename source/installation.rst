@@ -9,22 +9,35 @@
 Installation
 ############
 
+.. warning::
+   **Official FreeUnit RPM/DEB packages are coming soon.**
+   As of April 2026, FreeUnit is distributed via Docker images,
+   source builds, and pre-built ``unitctl`` binaries from GitHub Releases.
+   The ``packages.nginx.org/unit/*`` repositories described below
+   belong to the archived NGINX Unit project and will not receive further
+   updates — use them only to migrate off.
+   See the :doc:`migration` guide for the current install paths
+   and for maintainer instructions on rebasing community packages.
+
 You can install FreeUnit in four alternative ways:
 
 - Choose from our official :ref:`binary packages <installation-precomp-pkgs>`
-  for a few popular systems.
-  They're as easy to use as any other packaged software
-  and suit most purposes straight out of the box.
+  for a few popular systems (**coming soon** — see the
+  :doc:`migration guide <migration>` for the current status
+  and :ref:`Docker <migration-docker>` / :ref:`Source <migration-source>`
+  install paths).
 
 - If your preferred OS or language version
   is missing from the official package list,
   try :ref:`third-party repositories <installation-community-repos>`.
   Be warned, though: we don't maintain them.
+  Packagers updating those recipes should follow the
+  :ref:`maintainer guide <migration-community-repos>`.
 
-- Run our :ref:`Docker official images <installation-docker>`,
+- Run our :ref:`Docker official images <migration-docker>`,
   prepackaged with varied language combinations.
 
-- To fine-tune Unit to your goals,
+- To fine-tune FreeUnit to your goals,
   download the :ref:`sources <source>`,
   install the :ref:`toolchain <source-prereq-build>`,
   and :ref:`build <source-config-src>` a custom binary from scratch;
@@ -90,9 +103,18 @@ Optional dependencies:
 Official packages
 *****************
 
-Installing an official precompiled Unit binary package
-is best on most occasions;
-they're available for:
+.. warning::
+   **Official FreeUnit RPM/DEB packages are coming soon.**
+   The repositories, keys, and package names documented in this section
+   (``packages.nginx.org/unit/*``, ``nginx-keyring.gpg``, ``unit``,
+   ``unit-php``, …) refer to the **archived NGINX Unit** project and
+   are kept here for reference only. Until FreeUnit's native packages
+   land, install via :ref:`Docker <migration-docker>` or a
+   :ref:`source build <migration-source>`.
+   Progress: https://github.com/freeunitorg/freeunit/milestone/2
+
+Historically, official precompiled Unit binary packages
+have been available for:
 
 - Amazon |_| Linux :ref:`AMI <installation-amazon-ami>`,
   Amazon |_| Linux |_| :ref:`2 <installation-amazon-20lts>`,
@@ -128,20 +150,17 @@ at the `npm <https://www.npmjs.com/package/unit-http>`_ registry.
 .. nxt_details:: Repo installation script
    :hash: repo-install
 
-   We provide a `script <https://github.com/nginx/unit/tree/master/tools>`__
-   that adds our official repos on the systems we support:
+   .. warning::
 
-   .. code-block:: console
+      This script targets the archived NGINX Unit repositories
+      (``packages.nginx.org/unit/*``) and is **not** compatible with FreeUnit.
+      Use the manual steps below for each distribution,
+      or install via :ref:`Docker <installation-docker>` /
+      :ref:`source build <source>`.
 
-      $ wget https://raw.githubusercontent.com/nginx/unit/master/tools/setup-unit && chmod +x setup-unit
-
-   .. code-block:: console
-
-      # ./setup-unit repo-config
-
-   Use it at your discretion;
-   explicit steps are provided below
-   for each distribution.
+   The original script is archived at
+   `github.com/nginx/unit/tree/master/tools
+   <https://github.com/nginx/unit/tree/master/tools>`__ for reference only.
 
 
 .. _installation-precomp-amazon:
@@ -920,13 +939,18 @@ macOS
 
    .. tab:: Homebrew
 
-      To install Unit on macOS,
-      use the official Homebrew
-      `tap <https://github.com/nginx/homebrew-unit>`_:
+      .. warning::
+
+         The Homebrew tap for FreeUnit is not yet published.
+         Install via :ref:`Docker <installation-docker>` or a
+         :ref:`source build <source>` until the tap lands.
+
+      Previously, Unit on macOS was installed via the
+      `nginx/homebrew-unit <https://github.com/nginx/homebrew-unit>`_ tap:
 
       .. code-block:: console
 
-         $ brew install nginx/unit/unit
+         $ brew install nginx/unit/unit  # archived; do not use
 
       This deploys the core Unit binary
       and the prerequisites for the
@@ -1053,21 +1077,21 @@ If you update Unit later, make sure to update the module as well:
 
       $ npm install -g node-gyp
 
-   Next, clone the Unit source code to build a :program:`unit-http` module
+   Next, clone the FreeUnit source to build a :program:`unit-http` module
    for the selected Node.js version:
 
    .. code-block:: console
 
-      $ git clone https://github.com/nginx/unit
+      $ git clone https://github.com/freeunitorg/freeunit
 
    .. code-block:: console
 
-      $ cd unit
+      $ cd freeunit
 
    .. code-block:: console
 
       $ pwd
-            :nxt_hint:`/home/user/unit <Note the path to the source code>`
+            :nxt_hint:`/home/user/freeunit <Note the path to the source code>`
 
    .. code-block:: console
 
@@ -1090,7 +1114,7 @@ If you update Unit later, make sure to update the module as well:
 
    .. code-block:: console
 
-      $ CPPFLAGS="-I/home/user/unit/include/" LDFLAGS="-L/home/user/unit/lib/"  \
+      $ CPPFLAGS="-I/home/user/freeunit/include/" LDFLAGS="-L/home/user/freeunit/lib/"  \
             make node-install
 
    .. code-block:: console
@@ -1179,8 +1203,17 @@ Community Repositories
 .. warning::
 
    These distributions are maintained by their respective communities,
-   not NGINX.
-   Use them with caution.
+   not the FreeUnit project.
+   Use them with caution — they still ship the archived ``unit``/
+   ``nginx-unit`` packages and may lag several releases behind.
+
+.. note::
+   **For package maintainers:** the steps to rebase these recipes onto
+   ``freeunitorg/freeunit`` (rename the package, swap the source URL,
+   add ``provides``/``obsoletes`` aliases, refresh checksums) are
+   documented in
+   :ref:`Community Repository Maintainers <migration-community-repos>`
+   in the migration guide.
 
 ..
    Legacy anchors are left here so that external links remain valid
@@ -1913,216 +1946,79 @@ Community Repositories
 Docker Images
 *************
 
-Unit's Docker images
-come in several language-specific flavors:
+FreeUnit images are published to
+`GitHub Container Registry <https://github.com/freeunitorg/freeunit/pkgs/container/freeunit>`_
+as multi-arch manifests (``amd64`` + ``arm64``).
+
+Tag format: :samp:`{VERSION}-{VARIANT}` (pinned) or :samp:`latest-{VARIANT}` (rolling).
 
 .. list-table::
    :header-rows: 1
+   :widths: 30 70
 
-   * - Tag
+   * - Variant
      - Description
 
-   * - :samp:`|version|-minimal`
-     - No language modules;
-       based on the **debian:bullseye-slim**
-       `image <https://hub.docker.com/_/debian>`__.
+   * - ``minimal``
+     - No language modules. Base for custom images.
 
-   * - :samp:`|version|-go1.21`
-     - Single-language;
-       based on the **golang:1.21**
-       `image <https://hub.docker.com/_/golang>`__.
+   * - ``wasm``
+     - WebAssembly Components (WASI 0.2) via Wasmtime.
 
-   * - :samp:`|version|-jsc11`
-     - Single-language;
-       based on the **eclipse-temurin:11-jdk**
-       `image <https://hub.docker.com/_/eclipse-temurin>`__.
+   * - ``go1.24`` ``go1.25`` ``go1.26``
+     - Go (single-version images).
 
-   * - :samp:`|version|-node20`
-     - Single-language;
-       based on the **node:20**
-       `image <https://hub.docker.com/_/node>`__.
+   * - ``jsc17`` ``jsc21``
+     - Java Servlet Container via Eclipse Temurin OpenJDK LTS.
+       Runs ``.war``/``.jsp`` applications.
 
-   * - :samp:`|version|-perl5.38`
-     - Single-language;
-       based on the **perl:5.38**
-       `image <https://hub.docker.com/_/perl>`__.
+   * - ``node20`` ``node22`` ``node24``
+     - Node.js (single-version images).
 
-   * - :samp:`|version|-php8.2`
-     - Single-language;
-       based on the **php:8.2-cli**
-       `image <https://hub.docker.com/_/php>`__.
+   * - ``perl5.38`` ``perl5.40``
+     - Perl (single-version images).
 
-   * - :samp:`|version|-python3.11`
-     - Single-language;
-       based on the **python:3.11**
-       `image <https://hub.docker.com/_/python>`__.
+   * - ``php8.3`` ``php8.4`` ``php8.5``
+     - PHP (single-version images).
 
-   * - :samp:`|version|-ruby3.2`
-     - Single-language;
-       based on the **ruby:3.2**
-       `image <https://hub.docker.com/_/ruby>`__.
+   * - ``python3.12`` ``python3.12-slim``
+     - Python 3.12, full and slim variants.
 
-   * - :samp:`|version|-wasm`
-     - Single-language;
-       based on the **debian:bullseye-slim**
-       `image <https://hub.docker.com/_/debian>`__.
+   * - ``python3.13`` ``python3.13-slim``
+     - Python 3.13, full and slim variants.
 
-.. nxt_details:: Customizing language versions in Docker images
+   * - ``python3.14`` ``python3.14-slim``
+     - Python 3.14, full and slim variants.
+
+   * - ``ruby3.3`` ``ruby3.4``
+     - Ruby (single-version images).
+
+To pull and run an image:
+
+.. code-block:: console
+
+   $ docker pull ghcr.io/freeunitorg/freeunit::nxt_ph:`TAG <e.g. latest-php8.4 or 1.35.3-python3.13>`
+
+.. code-block:: console
+
+   $ docker run -d ghcr.io/freeunitorg/freeunit::nxt_ph:`TAG <e.g. latest-php8.4 or 1.35.3-python3.13>`
+
+.. nxt_details:: Building custom language-version images
    :hash: inst-lang-docker
 
-   To build a custom language version image,
-   clone and rebuild the sources locally
-   with Docker installed:
+   Clone the FreeUnit source, then build a specific variant locally:
 
    .. code-block:: console
 
-      $ make build-<language name><language version> VERSIONS_<language name>=<language version>
+      $ git clone https://github.com/freeunitorg/freeunit
+      $ cd freeunit
+      $ docker build -f pkg/docker/Dockerfile.:nxt_ph:`VARIANT <e.g. python3.13>` pkg/docker/
 
-   The :program:`make` utility parses the command line
-   to extract the language name and version;
-   these values must reference an existing official language image
-   to be used as the base for the build.
-   If not sure whether an official image exists
-   for a specific language version,
-   follow the links in the tag table above.
-
-   .. note::
-
-      Unit relies on the official Docker images,
-      so any customization method offered by their maintainers
-      is equally applicable;
-      to tailor a Unit image to your needs,
-      see the quick reference for its base image.
-
-   The language name can be
-   **go**, **jsc**, **node**, **perl**,
-   **php**, **python**, or **ruby**;
-   the version is defined as **<major>.<minor>**,
-   except for **jsc** and **node**
-   that take only major version numbers
-   (as seen in the tag table).
-   Thus, to create an image with Python 3.10
-   and tag it as **unit:|version|-python3.10**:
-
-   .. subs-code-block:: console
-
-      $ git clone https://github.com/nginx/unit
-
-   .. code-block:: console
-
-      $ cd unit
-
-   .. code-block:: console
-
-      $ git checkout |version|  # Optional; use to choose a specific Unit version
-
-   .. code-block:: console
-
-      $ cd pkg/docker/
-
-   .. code-block:: console
-
-      $ make build-:nxt_ph:`python3.10 <Language name and version>` VERSIONS_:nxt_ph:`python <Language name>`=:nxt_ph:`3.10 <Language version>`
-
-   For details, see the
-   `Makefile
-   <https://github.com/nginx/unit/blob/master/pkg/docker/Makefile>`__.
+   See ``pkg/docker/`` for all available Dockerfiles and the
+   `Makefile <https://github.com/freeunitorg/freeunit/blob/master/pkg/docker/Makefile>`__
+   for the full build pipeline.
    For other customization scenarios, see the
    :doc:`Docker howto <howto/docker>`.
-
-.. nxt_details:: Images with pre-1.29.1 Unit versions
-   :hash: inst-pre-official-docker
-
-   Before Unit 1.29.1 was released,
-   our Docker images were available
-   from the official
-   `NGINX repository <https://hub.docker.com/r/nginx/unit/>`_
-   on Docker Hub.
-
-.. nxt_details:: Images with pre-1.22.0 Unit versions
-   :hash: inst-legacy-docker
-
-   Before Unit 1.22.0 was released,
-   the following tagging scheme was used:
-
-    .. list-table::
-       :header-rows: 1
-
-       * - Tag
-         - Description
-
-       * - **<version>-full**
-         - Contains modules for all languages that Unit then supported.
-
-       * - **<version>-minimal**
-         - No language modules were included.
-
-       * - **<version>-<language>**
-         - A specific language module
-           such as **1.21.0-ruby2.3** or **1.21.0-python2.7**.
-
-You can obtain the images from these sources:
-
-.. tabs::
-   :prefix: docker
-
-   .. tab:: Docker Hub
-
-      To install and run Unit from
-      `official builds <https://hub.docker.com/_/unit>`__
-      at Docker Hub:
-
-      .. code-block:: console
-
-         $ docker pull unit::nxt_ph:`TAG <Specific image tag; see above for a complete list>`
-
-      .. code-block:: console
-
-         $ docker run -d unit::nxt_ph:`TAG <Specific image tag; see above for a complete list>`
-
-
-   .. tab:: Amazon ECR Public Gallery
-
-      To install and run Unit from NGINX's
-      `repository <https://gallery.ecr.aws/nginx/unit>`__
-      at Amazon ECR Public Gallery:
-
-      .. code-block:: console
-
-         $ docker pull public.ecr.aws/nginx/unit::nxt_ph:`TAG <Specific image tag; see above for a complete list>`
-
-      .. code-block:: console
-
-         $ docker run -d public.ecr.aws/nginx/unit::nxt_ph:`TAG <Specific image tag; see above for a complete list>`
-
-
-   .. tab:: packages.nginx.org
-
-      .. warning::
-
-         Unit's 1.30+ image tarballs aren't published on the website;
-         this channel is deprecated.
-
-      To install and run Unit
-      from the tarballs stored on our
-      `website <https://packages.nginx.org/unit/docker/>`_:
-
-      .. subs-code-block:: console
-
-         $ curl -O https://packages.nginx.org/unit/docker/1.29.1/nginx-unit-:nxt_ph:`TAG <Specific image tag; see above for a complete list>`.tar.gz
-
-      .. code-block:: console
-
-         $ curl -O https://packages.nginx.org/unit/docker/1.29.1/nginx-unit-:nxt_ph:`TAG <Specific image tag; see above for a complete list>`.tar.gz.sha512
-
-      .. code-block:: console
-
-         $ sha512sum -c nginx-unit-:nxt_ph:`TAG <Specific image tag; see above for a complete list>`.tar.gz.sha512
-               nginx-unit-:nxt_ph:`TAG <Specific image tag; see above for a complete list>`.tar.gz: OK
-
-      .. code-block:: console
-
-         $ docker load < nginx-unit-:nxt_ph:`TAG <Specific image tag; see above for a complete list>`.tar.gz
 
 Runtime details:
 
@@ -2139,12 +2035,9 @@ Runtime details:
    * - Non-privileged :ref:`user and group <security-apps>`
      - **unit**
 
-For more details,
-see the repository pages
-(`Docker Hub <https://hub.docker.com/_/unit>`_,
-`Amazon ECR Public Gallery <https://gallery.ecr.aws/nginx/unit>`_)
-and our
-:doc:`Docker howto <howto/docker>`.
+For full image details, see the
+`GHCR package page <https://github.com/freeunitorg/freeunit/pkgs/container/freeunit>`_
+and our :doc:`Docker howto <howto/docker>`.
 
 
 .. _installation-docker-init:
@@ -2200,7 +2093,7 @@ to your **Dockerfile** derived from an official image:
 
 .. subs-code-block:: docker
 
-   FROM unit:|version|-minimal
+   FROM ghcr.io/freeunitorg/freeunit:|version|-minimal
    COPY ./*.pem  /docker-entrypoint.d/
    COPY ./*.json /docker-entrypoint.d/
    COPY ./*.sh   /docker-entrypoint.d/
@@ -2223,7 +2116,7 @@ to a container at startup:
 
    $ docker run -d --mount  \
             type=bind,src=:nxt_ph:`/path/to/config/files/ <Use a real path instead>`,dst=/docker-entrypoint.d/  \
-            unit:|version|-minimal)
+            ghcr.io/freeunitorg/freeunit:|version|-minimal
 
 
 .. _source:
@@ -2232,9 +2125,9 @@ to a container at startup:
 Source Code
 ***********
 
-You can get Unit's source code
-from our official GitHub repository
-or as a tarball.
+FreeUnit's source code lives in the community-maintained fork
+at `github.com/freeunitorg/freeunit
+<https://github.com/freeunitorg/freeunit>`_.
 
 .. tabs::
    :prefix: get-source
@@ -2243,7 +2136,7 @@ or as a tarball.
 
       .. subs-code-block:: console
 
-         $ git clone https://github.com/nginx/unit            # Latest updates to the repository
+         $ git clone https://github.com/freeunitorg/freeunit            # Latest updates to the repository
 
       .. subs-code-block:: console
 
@@ -2251,26 +2144,26 @@ or as a tarball.
 
       .. subs-code-block:: console
 
-         $ git clone -b |version| https://github.com/nginx/unit  # Specific version tag; see https://github.com/nginx/unit/tags
+         $ git clone -b |version| https://github.com/freeunitorg/freeunit  # Specific version tag; see https://github.com/freeunitorg/freeunit/tags
 
       .. subs-code-block:: console
 
-         $ cd unit
+         $ cd freeunit
 
 
    .. tab:: Tarball
 
       .. subs-code-block:: console
 
-         $ curl -O https://sources.nginx.org/unit/unit-|version|.tar.gz
+         $ curl -LO https://github.com/freeunitorg/freeunit/archive/refs/tags/|version|.tar.gz
 
       .. subs-code-block:: console
 
-         $ tar xzf unit-|version|.tar.gz
+         $ tar xzf |version|.tar.gz
 
       .. subs-code-block:: console
 
-         $ cd unit-|version|
+         $ cd freeunit-|version|
 
 To build Unit and specific language modules from these sources,
 refer to the
