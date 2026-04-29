@@ -35,6 +35,6 @@ jobs:
       docs_source_path: "deploy"
       docs_build_path: "."
       doc_type: "sphinx"
-      environment: ${{ inputs.environment }}
+      environment: ${{ inputs.environment || 'preview' }}
       auto_deploy_branch: "main"
       auto_deploy_env: "prod"

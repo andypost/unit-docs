@@ -5,6 +5,7 @@
    keyfeatures
    news
    installation
+   migration
    controlapi
    configuration/index
    scripting
