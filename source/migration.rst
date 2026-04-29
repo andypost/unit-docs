@@ -1,7 +1,7 @@
 .. meta::
- :og:description: Migrate from archived Unit installations or community packages
- to the community-maintained FreeUnit fork, including maintainer guidance
- for updating downstream packaging recipes.
+   :og:description: Migrate from archived Unit installations or community packages
+      to the community-maintained FreeUnit fork, including maintainer guidance
+      for updating downstream packaging recipes.
 
 .. include:: include/replace.rst
 
@@ -14,7 +14,7 @@ This guide covers two audiences:
 - **Users** running archived Unit or a community-maintained package
   who want to switch to **FreeUnit**, the community-maintained LTS fork.
 - **Package maintainers** of community repositories (Alpine, Arch, Gentoo,
-  *BSD, Nix, Remi, etc.) who need to rebase their recipes onto the
+  \*BSD, Nix, Remi, etc.) who need to rebase their recipes onto the
   ``freeunitorg/freeunit`` source tree.
 
 .. note::
@@ -46,8 +46,8 @@ This guide covers two audiences:
   and :ref:`build <migration-source-build>` a custom binary from scratch.
 
 - For RHEL/Fedora users who want to keep Remi's PHP packages,
-  try the :ref:`hybrid approach <migration-remi-hybrid>`
-  (FreeUnit core + Remi PHP modules).
+  the FreeUnit core is ABI-compatible with Remi's ``phpXX-unit-php``
+  modules.
 
 **For package maintainers** — rebase your recipe:
 
@@ -140,13 +140,13 @@ The rebase is mechanical:
 
  .. list-table::
 
-  * - Control :ref:`socket`
+  * - Control socket
     - **/run/control.unit.sock**
 
-  * - Log :ref:`file`
+  * - Log file
     - **/var/log/unit.log**
 
-  * - Non-privileged :ref:`user and group`
+  * - Non-privileged user and group
     - **unit**
 
  .. tab:: ALT
@@ -190,13 +190,13 @@ The rebase is mechanical:
 
  .. list-table::
 
-  * - Control :ref:`socket`
+  * - Control socket
     - **/run/unit/control.sock**
 
-  * - Log :ref:`file`
+  * - Log file
     - **/var/log/unit/unit.log**
 
-  * - Non-privileged :ref:`user and group`
+  * - Non-privileged user and group
     - **_unit** (mind the **_** prefix)
 
  .. tab:: Arch
@@ -253,13 +253,13 @@ The rebase is mechanical:
 
  .. list-table::
 
-  * - Control :ref:`socket`
+  * - Control socket
     - **/run/unit/control.sock**
 
-  * - Log :ref:`file`
+  * - Log file
     - **/var/log/unit/unit.log**
 
-  * - Non-privileged :ref:`user and group`
+  * - Non-privileged user and group
     - **nobody**
 
  .. tab:: FreeBSD
@@ -316,13 +316,13 @@ The rebase is mechanical:
 
  .. list-table::
 
-  * - Control :ref:`socket`
+  * - Control socket
     - **/var/run/unit/control.unit.sock**
 
-  * - Log :ref:`file`
+  * - Log file
     - **/var/log/unit/unit.log**
 
-  * - Non-privileged :ref:`user and group`
+  * - Non-privileged user and group
     - **www**
 
  .. tab:: Gentoo
@@ -377,13 +377,13 @@ The rebase is mechanical:
 
  .. list-table::
 
-  * - Control :ref:`socket`
+  * - Control socket
     - **/run/unit.sock**
 
-  * - Log :ref:`file`
+  * - Log file
     - **/var/log/unit.log**
 
-  * - Non-privileged :ref:`user and group`
+  * - Non-privileged user and group
     - **nobody**
 
  .. tab:: NetBSD
@@ -436,13 +436,13 @@ The rebase is mechanical:
 
  .. list-table::
 
-  * - Control :ref:`socket`
+  * - Control socket
     - **/var/run/unit/control.unit.sock**
 
-  * - Log :ref:`file`
+  * - Log file
     - **/var/log/unit/unit.log**
 
-  * - Non-privileged :ref:`user and group`
+  * - Non-privileged user and group
     - **unit**
 
  .. tab:: Nix
@@ -507,13 +507,13 @@ The rebase is mechanical:
 
  .. list-table::
 
-  * - Control :ref:`socket`
+  * - Control socket
     - **/run/unit/control.unit.sock**
 
-  * - Log :ref:`file`
+  * - Log file
     - **/var/log/unit/unit.log**
 
-  * - Non-privileged :ref:`user and group`
+  * - Non-privileged user and group
     - **unit**
 
  .. tab:: OpenBSD
@@ -574,13 +574,13 @@ The rebase is mechanical:
 
  .. list-table::
 
-  * - Control :ref:`socket`
+  * - Control socket
     - **/var/run/unit/control.unit.sock**
 
-  * - Log :ref:`file`
+  * - Log file
     - **/var/log/unit/unit.log**
 
-  * - Non-privileged :ref:`user and group`
+  * - Non-privileged user and group
     - **_unit**
 
  .. tab:: Remi's RPM
@@ -649,13 +649,13 @@ The rebase is mechanical:
 
  .. list-table::
 
-  * - Control :ref:`socket`
+  * - Control socket
     - **/run/unit/control.sock**
 
-  * - Log :ref:`file`
+  * - Log file
     - **/var/log/unit/unit.log**
 
-  * - Non-privileged :ref:`user and group`
+  * - Non-privileged user and group
     - **nobody**
 
 .. _migration-docker:
@@ -668,9 +668,9 @@ FreeUnit provides official Docker images for easy deployment.
 
 .. _migration-docker-steps:
 
-====
+=====
 Steps
-====
+=====
 
 #. **Pick a tag and reference it**
 
@@ -762,9 +762,9 @@ Steps
 
 .. _migration-docker-custom:
 
-====
+=============
 Custom Images
-====
+=============
 
 If you build custom images, use FreeUnit as your base:
 
@@ -783,18 +783,18 @@ If you build custom images, use FreeUnit as your base:
 
 .. _migration-source:
 
-****************
+**************************
 Build FreeUnit from Source
-****************
+**************************
 
 For bare-metal deployments or when you need maximum control,
 build FreeUnit from source.
 
 .. _migration-source-prereqs:
 
-====
+=============
 Prerequisites
-====
+=============
 
 FreeUnit compiles and runs on various Unix-like operating systems, including:
 
@@ -816,15 +816,15 @@ App languages and platforms that FreeUnit can run:
 
 Optional dependencies:
 
-- OpenSSL 1.0.1 or later for :ref:`TLS` support
-- PCRE (8.0+) or PCRE2 (10.23+) for :ref:`regex`
+- OpenSSL 1.0.1 or later for TLS support
+- PCRE (8.0+) or PCRE2 (10.23+) for regular expressions
 - Wasmtime for WebAssembly support
 
 .. _migration-source-build:
 
-====
+==========================
 Build and Install FreeUnit
-====
+==========================
 
 #. **Clone the FreeUnit repository**
 
@@ -911,9 +911,9 @@ FreeUnit preserves full compatibility with previous Unit builds:
 
 .. _migration-troubleshooting:
 
-****************
+************************
 Troubleshooting FreeUnit
-****************
+************************
 
 .. nxt_details:: FreeUnit fails to start after migration
  :hash: migration-start-fail
@@ -988,9 +988,9 @@ Troubleshooting FreeUnit
 
 .. _migration-roll-back:
 
-****************
+******************
 Rollback Procedure
-****************
+******************
 
 If you need to revert to the previous setup:
 
@@ -1095,8 +1095,8 @@ Your ``config.json`` works as-is.
 **Q: Can I mix FreeUnit core with Remi's PHP modules?**
 
 Yes. FreeUnit's core binary is ABI-compatible with Remi's
-``phpXX-unit-php`` modules. This is the basis of the
-:ref:`hybrid approach <migration-remi-hybrid>`.
+``phpXX-unit-php`` modules, so you can swap only the core and keep
+Remi's PHP packages in place.
 
 **Q: How do I verify I'm running FreeUnit?**
 
@@ -1138,5 +1138,5 @@ https://github.com/freeunitorg/freeunit/commits/main
 .. seealso::
 
  - :doc:`installation` — Install FreeUnit from scratch
- - :doc:`configuration` — Application configuration reference
+ - :doc:`configuration/index` — Application configuration reference
  - :ref:`community` — Get help from the FreeUnit community
